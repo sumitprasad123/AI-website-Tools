@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Hub - Discover 50+ Essential AI Tools</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="header-content">
+                <h1>🚀 AI Tools Hub</h1>
+                <p>Discover 50+ Essential AI Tools for Every Need</p>
+            </div>
+            <div class="header-controls">
+                <button id="dark-mode-btn" class="control-btn" title="Toggle dark mode">🌙</button>
+                <button id="theme-btn" class="control-btn" title="Apply alternate theme">🎨 Theme</button>
+                <button id="reset-theme-btn" class="control-btn" title="Reset to default theme">🔁 Reset</button>
+                <button id="favorites-btn" class="control-btn" onclick="showFavorites()" title="View favorites">❤️ Favorites</button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <!-- <div class="search-container">
+            <input 
+                type="text" 
+                id="search-input" 
+                class="search-bar" 
+                placeholder="🔍 Search AI tools by name or description..."
+            >
+        </div> -->
+    </header>
+
+    <!-- Trending Section -->
+    <section id="trending-section" class="trending-section"></section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <h2>Browse by Category</h2>
+        <div class="categories"></div>
+    </section>
+
+    <!-- Tools Display Section -->
+    <section id="tools-section" class="tools-section"></section>
+
+    <!-- Favorites Modal -->
+    <div class="favorites-modal-overlay" id="favoritesModalOverlay">
+        <div class="favorites-modal">
+            <div class="favorites-modal-header">
+                <h2 id="favoritesModalTitle">❤️ My Favorites</h2>
+                <button class="favorites-modal-close" onclick="closeFavoritesModal()" title="Close">✕</button>
+            </div>
+            <div id="favoritesListContainer" class="favorites-list"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Sumit Prasad | Your ultimate destination to discover the best AI tools </p>
+        </div></p>
+        <p>Made for you for AI enthusiasts</p>
+    </footer>
+
+    <!-- JS Link -->
+    <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+
+    <!-- Theme Cycling Feature -->
+    <script>
+        // Theme cycling system
+        const themes = [
+            { name: 'Default', class: null },
+            { name: 'Blue-Purple', class: 'theme-blue-purple' },
+            { name: 'Dark Neon', class: 'theme-neon' },
+            { name: 'Soft Light', class: 'theme-soft-light' },
+            { name: 'Glassmorphism', class: 'theme-glass' }
+        ];
+
+        let currentThemeIndex = 0;
+
+        // Initialize theme system
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeBtn = document.getElementById('theme-btn');
+            const resetThemeBtn = document.getElementById('reset-theme-btn');
+            const body = document.body;
+
+            // Check if theme preference is saved in localStorage
+            const savedThemeIndex = localStorage.getItem('preferred-theme-index');
+            if (savedThemeIndex !== null) {
+                currentThemeIndex = parseInt(savedThemeIndex);
+                applyTheme(currentThemeIndex);
+            }
+
+            // Theme button - Cycle through themes
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    console.log('🎨 Theme button clicked - Current:', themes[currentThemeIndex].name);
+                    
+                    // Move to next theme
+                    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                    const newTheme = themes[currentThemeIndex];
+                    
+                    // Apply theme
+                    applyTheme(currentThemeIndex);
+                    
+                    // Save preference
+                    localStorage.setItem('preferred-theme-index', currentThemeIndex);
+                    
+                    // Visual feedback - Rotation animation
+                    themeBtn.style.transition = 'transform 0.6s ease-in-out';
+                    themeBtn.style.transform = 'rotate(360deg)';
+                    setTimeout(() => {
+                        themeBtn.style.transform = '';
+                    }, 600);
+                    
+                    console.log('✅ Applied:', newTheme.name);
+                    console.log('📍 Theme index:', currentThemeIndex, '/', themes.length - 1);
+                });
+            }
+
+            // Reset button - Back to default theme
+            if (resetThemeBtn) {
+                resetThemeBtn.addEventListener('click', () => {
+                    console.log('🔁 Reset button clicked');
+                    
+                    // Remove all theme classes
+                    removeAllThemeClasses();
+                    currentThemeIndex = 0;
+                    
+                    // Save preference
+                    localStorage.setItem('preferred-theme-index', '0');
+                    
+                    // Visual feedback
+                    resetThemeBtn.style.transition = 'transform 0.6s ease-in-out';
+                    resetThemeBtn.style.transform = 'rotate(360deg)';
+                    setTimeout(() => {
+                        resetThemeBtn.style.transform = '';
+                    }, 600);
+                    
+                    console.log('✅ Default theme restored');
+                    console.log('📍 Theme index: 0 (Default)');
+                });
+            }
+
+            // Function to apply theme
+            function applyTheme(index) {
+                const body = document.body;
+                const theme = themes[index];
+                
+                // Remove all theme classes first
+                removeAllThemeClasses();
+                
+                // Apply new theme class if not default
+                if (theme.class) {
+                    body.classList.add(theme.class);
+                }
+            }
+
+            // Function to remove all theme classes
+            function removeAllThemeClasses() {
+                const body = document.body;
+                themes.forEach(theme => {
+                    if (theme.class) {
+                        body.classList.remove(theme.class);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget">
+        <!-- Floating Button -->
+        <button id="chatbot-toggle" class="chatbot-toggle" title="Open AI Assistant">
+            <span class="chat-icon">💬</span>
+            <span class="notification-badge" id="notification-badge" style="display: none;">1</span>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chatbot-window" class="chatbot-window">
+            <!-- Chat Header -->
+            <div class="chatbot-header">
+                <div class="header-info">
+                    <h3>🤖 AI Assistant</h3>
+                    <p>Ask me about AI tools</p>
+                </div>
+                <div class="header-actions">
+                    <button id="voice-toggle" class="header-btn" title="Toggle voice output">
+                        <span class="voice-icon">🔊</span>
+                    </button>
+                    <button id="clear-chat" class="header-btn" title="Clear chat">🗑️</button>
+                    <button id="chatbot-close" class="header-btn close-btn" title="Close">✕</button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p>👋 Hi! I'm your AI Assistant. Ask me about video editing, coding, image generation, presentations, audio tools, writing, marketing, productivity tools, image editing, video generation, or education!</p>
+                    </div>
+                    <span class="message-time">Now</span>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="typing-indicator" style="display: none;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chatbot-input-area">
+                <div class="input-controls">
+                    <input 
+                        type="text" 
+                        id="chatbot-input" 
+                        class="chatbot-input" 
+                        placeholder="Type or click 🎤 to speak..."
+                        autocomplete="off"
+                    >
+                    <button id="voice-input-btn" class="voice-input-btn" title="Voice input">
+                        <span class="mic-icon">🎤</span>
+                    </button>
+                    <button id="send-btn" class="send-btn" title="Send message">
+                        <span class="send-icon">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

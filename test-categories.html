@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Hub - Category Click Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .status {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #00d4ff;
+            transform: translateY(-5px);
+        }
+
+        .card.active {
+            background: rgba(0, 212, 255, 0.3);
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .card-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        #tools-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            min-height: 200px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tool-card h3 {
+            margin-bottom: 8px;
+            color: #00d4ff;
+        }
+
+        .tool-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .tool-btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        .console-output {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #00d4ff;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+        }
+
+        .log-success { color: #00ff00; }
+        .log-error { color: #ff4444; }
+        .log-info { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 AI Tools Hub - Category Test</h1>
+
+        <div class="status">
+            <strong>Status:</strong> <span id="status">Loading...</span>
+        </div>
+
+        <h2>Categories</h2>
+        <div class="categories" id="categories"></div>
+
+        <h2>Tools</h2>
+        <div id="tools-container">
+            <p>Click a category above to see tools</p>
+        </div>
+
+        <div class="console-output" id="console"></div>
+    </div>
+
+    <script>
+        // Simple logger
+        const logs = [];
+        function log(type, message) {
+            const entry = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logs.push({ type, message: entry });
+            
+            const console_el = document.getElementById('console');
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            div.textContent = entry;
+            console_el.appendChild(div);
+            console_el.scrollTop = console_el.scrollHeight;
+            
+            // Also log to browser console
+            if (type === 'error') console.error(message);
+            else if (type === 'success') console.log('✅', message);
+            else console.log('ℹ️', message);
+        }
+
+        // Tool Data
+        const toolsData = {
+            coding: {
+                name: "Coding AI Tools",
+                icon: "💻",
+                tools: [
+                    { name: "ChatGPT", desc: "AI assistant for code generation", tag: "🔥 Trending", link: "https://chatgpt.com/" },
+                    { name: "GitHub Copilot", desc: "AI pair programmer", tag: "⭐ Popular", link: "https://github.com/features/copilot" },
+                    { name: "Codeium", desc: "Free AI code completion", tag: "🆓 Free", link: "https://codeium.com" },
+                ]
+            },
+            video: {
+                name: "Video Editing AI",
+                icon: "🎬",
+                tools: [
+                    { name: "CapCut AI", desc: "Free AI video editor", tag: "🆓 Free", link: "https://www.capcut.com" },
+                    { name: "Runway ML", desc: "AI magic tools for video", tag: "⭐ Popular", link: "https://runwayml.com" },
+                    { name: "Opus Clip", desc: "Auto-generate viral clips", tag: "🔥 Trending", link: "https://www.opus.pro" },
+                ]
+            },
+            image: {
+                name: "Image Generation AI",
+                icon: "🎨",
+                tools: [
+                    { name: "DALL·E 3", desc: "OpenAI's text-to-image", tag: "🔥 Trending", link: "https://openai.com/dall-e-3" },
+                    { name: "Midjourney", desc: "Premium AI art", tag: "⭐ Popular", link: "https://www.midjourney.com" },
+                    { name: "Leonardo AI", desc: "Real-time generation", tag: "🆓 Free", link: "https://leonardo.ai" },
+                ]
+            }
+        };
+
+        // Render Categories
+        function renderCategories() {
+            log('info', 'Rendering categories...');
+            const container = document.getElementById('categories');
+            container.innerHTML = '';
+
+            Object.entries(toolsData).forEach(([key, category]) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-icon">${category.icon}</div>
+                    <div class="card-name">${category.name}</div>
+                `;
+
+                card.addEventListener('click', () => {
+                    log('success', `Category "${key}" clicked!`);
+                    showCategory(key, card);
+                });
+
+                container.appendChild(card);
+                log('info', `Added category: ${key}`);
+            });
+
+            log('success', 'All categories rendered');
+            showCategory('coding', container.querySelector('.card'));
+        }
+
+        // Show Category
+        function showCategory(key, cardElement) {
+            log('info', `Showing category: ${key}`);
+
+            // Update active state
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            cardElement.classList.add('active');
+
+            // Get tools
+            const category = toolsData[key];
+            if (!category) {
+                log('error', `Category "${key}" not found!`);
+                return;
+            }
+
+            // Render tools
+            const container = document.getElementById('tools-container');
+            let html = `<h2>${category.icon} ${category.name}</h2><div class="tools-grid">`;
+
+            category.tools.forEach(tool => {
+                html += `
+                    <div class="tool-card">
+                        <h3>${tool.name}</h3>
+                        <p>${tool.desc}</p>
+                        <span class="tool-tag">${tool.tag}</span>
+                        <button class="tool-btn" onclick="window.open('${tool.link}', '_blank')">Use Tool</button>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+            log('success', `Rendered ${category.tools.length} tools`);
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            log('success', 'Page loaded - initializing...');
+            const status = document.getElementById('status');
+            status.textContent = '✅ READY TO TEST';
+            status.style.color = '#00ff00';
+            
+            log('success', 'Script loaded successfully');
+            log('info', `Found ${Object.keys(toolsData).length} categories`);
+            
+            renderCategories();
+            
+            log('success', 'System full operational');
+        });
+    </script>
+</body>
+</html>
